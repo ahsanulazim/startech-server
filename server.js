@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import userRouter from "./router/userRouter.js";
 
 dotenv.config();
 const app = express();
@@ -13,6 +14,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+// Routes
+app.use("/users", userRouter);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
