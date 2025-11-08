@@ -7,7 +7,13 @@ export const createUser = async (req, res) => {
   const { name, email, phone } = req.body;
   const role = "customer";
   const joined = new Date(
-    new Date().toLocaleString("en-BD", { timeZone: "Asia/Dhaka" })
+    new Date().toLocaleString("en-BD", {
+      timeZone: "Asia/Dhaka",
+      hour12: true,
+      month: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
   );
   try {
     await userCollection.insertOne({ name, email, phone, role, joined });
