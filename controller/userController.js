@@ -4,11 +4,18 @@ const userCollection = client.db("shajidint").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, google } = req.body;
   const role = "customer";
   const joined = new Date();
   try {
-    await userCollection.insertOne({ name, email, phone, role, joined });
+    await userCollection.insertOne({
+      name,
+      email,
+      phone,
+      role,
+      joined,
+      google,
+    });
     res.status(200).send({ success: true });
   } catch (error) {
     console.error("Create user error:", error);
@@ -20,5 +27,9 @@ export const createUser = async (req, res) => {
 export const getUser = async (req, res) => {
   const email = req.params.email;
   const user = await userCollection.findOne({ email });
-  res.send(user);
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.status(200).json(user);
 };
