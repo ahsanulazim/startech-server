@@ -1,6 +1,6 @@
 import client from "../config/database.js";
 
-const userCollection = client.db("shajidint").collection("Users");
+const userCollection = client.db("startech").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
