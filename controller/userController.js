@@ -4,7 +4,7 @@ const userCollection = client.db("shajidint").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
-  const { name, email, phone, google } = req.body;
+  const { name, email, phone, google, userToken } = req.body;
   const role = "customer";
   const joined = new Date();
   try {
@@ -15,6 +15,7 @@ export const createUser = async (req, res) => {
       role,
       joined,
       google,
+      userToken,
     });
     res.status(200).send({ success: true });
   } catch (error) {
