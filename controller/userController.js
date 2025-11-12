@@ -1,11 +1,10 @@
 import client from "../config/database.js";
-import admin from "../firebase/firebase.js";
 
 const userCollection = client.db("startech").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
-  const { name, phone, email, google, userID } = req.body;
+  const { name, phone, email, google, userID, emailVerified } = req.body;
   const role = "customer";
   const joined = new Date();
 
@@ -18,6 +17,7 @@ export const createUser = async (req, res) => {
       joined,
       google,
       userID,
+      emailVerified,
     });
     res.status(200).send({ success: true });
   } catch (error) {
@@ -26,7 +26,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-// Get single user
+// Get single user by email
 export const getUserByEmail = async (req, res) => {
   const email = req.params.email;
   const user = await userCollection.findOne({ email });
@@ -36,6 +36,7 @@ export const getUserByEmail = async (req, res) => {
   res.status(200).json(user);
 };
 
+//Get user by phone
 export const getUserByPhone = async (req, res) => {
   const phone = req.params.phone;
   const user = await userCollection.findOne({ phone });
@@ -44,4 +45,24 @@ export const getUserByPhone = async (req, res) => {
   }
 
   res.status(200).json(user);
+};
+
+//Update existing user
+export const updateUser = async (req, res) => {
+  const email = req.params.email;
+  const updatedData = req.body;
+  try {
+    const result = await userCollection.updateOne(
+      { email },
+      { $set: updatedData }
+    );
+    if (result.modifiedCount > 0) {
+      res.status(200).send({ success: true, message: "User updated" });
+    } else {
+      res.status(404).send({ success: false, message: "User not found" });
+    }
+  } catch (error) {
+    console.error("Update error:", error);
+    res.status(500).send({ success: false, message: "Internal server error" });
+  }
 };
