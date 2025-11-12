@@ -3,7 +3,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from "./router/userRouter.js";
 import cookieParser from "cookie-parser";
-import authRouter from "./router/authRouter.js";
 
 dotenv.config();
 const app = express();
@@ -20,7 +19,6 @@ app.use(cookieParser());
 
 // Routes
 app.use("/users", userRouter);
-app.use('/auth', authRouter);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 

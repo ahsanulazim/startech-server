@@ -1,13 +1,18 @@
 import client from "../config/database.js";
+import admin from "../firebase/firebase.js";
 
 const userCollection = client.db("startech").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
-  const { name, email, phone, google, userToken } = req.body;
+  const { name, phone, google, userID } = req.body;
   const role = "customer";
   const joined = new Date();
+
   try {
+    const authenticatedUser = await admin.auth().getUser(userID);
+    const email = authenticatedUser.email;
+
     await userCollection.insertOne({
       name,
       email,
@@ -15,7 +20,7 @@ export const createUser = async (req, res) => {
       role,
       joined,
       google,
-      userToken,
+      userID,
     });
     res.status(200).send({ success: true });
   } catch (error) {
@@ -31,7 +36,6 @@ export const getUserByEmail = async (req, res) => {
   if (!user) {
     return res.status(404).json({ error: "User not found" });
   }
-
   res.status(200).json(user);
 };
 
