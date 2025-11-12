@@ -5,14 +5,11 @@ const userCollection = client.db("startech").collection("Users");
 
 // Create new user
 export const createUser = async (req, res) => {
-  const { name, phone, google, userID } = req.body;
+  const { name, phone, email, google, userID } = req.body;
   const role = "customer";
   const joined = new Date();
 
   try {
-    const authenticatedUser = await admin.auth().getUser(userID);
-    const email = authenticatedUser.email;
-
     await userCollection.insertOne({
       name,
       email,
